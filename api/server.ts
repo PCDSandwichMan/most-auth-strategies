@@ -1,14 +1,14 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 // const mongoose = require("mongoose");
-const morgan = require("morgan");
-const cors = require("cors");
-const compression = require("compression");
-const config = require("./utils/config.js");
-const helmet = require("helmet");
-const path = require("path");
+import morgan from "morgan";
+import cors from "cors";
+import compression from "compression";
+import config from "./utils/config.js";
+import helmet from "helmet";
+import path from "path";
 import "./passport";
 import passport from "passport";
-import cookieSession from "cookie-session";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 const http = require("http").Server(app);
@@ -22,12 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("./public"));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(
-  cookieSession({
-    max_age: 24 * 60 * 60 * 1000,
-    keys: ["sadfsdfadsdas"],
-  })
-);
+app.use(cookieParser());
 
 if (process.env.NODE_ENV === "production") {
   app.disable("x-powered-by");

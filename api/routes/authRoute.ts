@@ -5,12 +5,22 @@ const router = Router();
 
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email", "openid"] }),
-  (_, res) => res.status(200).json({ test: "test" })
+  (_1, _2, next) => {
+    next();
+  },
+  passport.authenticate("google", { scope: ["profile"] })
 );
 
-router.get("/google/redirect", passport.authenticate("google"), (req, res) =>
-  res.status(200).json({ test: req.user })
+router.get(
+  "/google/redirect",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000/fail",
+    session: false,
+  }),
+  (_, res) => {
+    console.log("second fired");
+    res.redirect("http://localhost:3000/");
+  }
 );
 
 // export default router;

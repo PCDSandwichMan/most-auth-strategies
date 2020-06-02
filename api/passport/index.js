@@ -1,5 +1,4 @@
 import passport from "passport";
-// import GoogleStrategy from "passport-google-oauth20";
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 passport.serializeUser((profile, done) => {
@@ -16,8 +15,11 @@ passport.use(
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       callbackURL: "/google/redirect",
+      proxy: true,
+      passReqToCallback: true,
     },
-    (accessToken, refreshToken, profile, done) => {
+    (req, accessToken, refreshToken, profile, done) => {
+      console.log(req);
       console.log({ accessToken, refreshToken, profile });
       return done(null, profile);
     }
